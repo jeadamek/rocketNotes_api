@@ -46,7 +46,7 @@ I could practice and study:
 
 The database diagram can be seen in the image below:<br/>
 
-![preview]()
+![preview](https://user-images.githubusercontent.com/78454317/230810731-6c9c5542-5c5b-4374-b217-3c97965ed65d.png)
 
 
 ## 🛠️ Technologies

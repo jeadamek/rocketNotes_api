@@ -1,10 +1,13 @@
 require("express-async-errors");
-const migrationsRun = require("./database/sqlite/migrations");
-const AppError = require("./utils/AppError");
+require("dotenv/config");
+
 const uploadConfig = require("./configs/upload");
 
-const cors = require('cors');
+const migrationsRun = require("./database/sqlite/migrations");
+const AppError = require("./utils/AppError");
+
 const express = require('express');
+const cors = require('cors');
 const routes = require("./routes");
 
 migrationsRun();
@@ -35,7 +38,7 @@ app.use((error, request, response, next) => {
 });
 
 
-const PORT = 3333;
+const PORT = process.env.PORT || 3333;
 // mando o app escutar a porta PORT
 // Quando for executado além de ouvir a porta ele irá imprimir no console que está rodando e a porta onde está rodando
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));

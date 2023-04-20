@@ -1,30 +1,21 @@
-// hash eh a funcao que gera a criptografia
+// hash é a função que gera a criptografia
 const { hash, compare } = require("bcryptjs");
 const AppError = require("../utils/AppError");
-const sqliteConnection = require("../database/sqlite")
+
+const UserRepository = require("../repositories/UserRepository");
+const sqliteConnection = require("../database/sqlite");
+const UserCreateService = require("../services/UserCreateService");
 
 class UsersController {
   async create(request, response) {
     const { name, email, password } = request.body;
 
-    const database = await sqliteConnection();
-
-    // coloca-se (?) onde quer subistituir por uma variavel
-    // se for mais de uma variavel, separar ela por virgula
-    // e adicionar (?) para cada variavel, ira subistituir na sequencia
-    const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [email])
-
-    if(checkUserExists){
-      throw new AppError("Este e-mail já está em uso.");
-    }
-
-    const hashedPassword = await hash(password, 8);
-
-    // insira da serguinte forma na tabela de usuarios
-    await database.run("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, hashedPassword]);
+    const userRepository = new UserRepository();
+    const userCreateService = new UserCreateService(userRepository);
+    await userCreateService.execute({ name, email, password });
 
     // retorna status de criado com sucesso
-    return response.status(201).json()
+    return response.status(201).json();
   }
 
   async update(request, response) {
